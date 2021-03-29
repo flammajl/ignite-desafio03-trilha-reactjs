@@ -37,6 +37,12 @@ interface PostProps {
 export default function Post({ post }: PostProps): JSX.Element {
   const router = useRouter();
 
+  const wordCount = post.data.content
+    .map(item => RichText.asText(item.body))
+    .join()
+    .match(/\w+/g).length;
+  const readTime = Math.ceil(wordCount / 200);
+
   if (router.isFallback) {
     return <p>Carregando...</p>;
   }
@@ -58,7 +64,8 @@ export default function Post({ post }: PostProps): JSX.Element {
             {post.data.author}
           </span>
           <span>
-            <FiClock />4 min
+            <FiClock />
+            {readTime} min
           </span>
         </div>
         {post.data.content.map(postItem => (
